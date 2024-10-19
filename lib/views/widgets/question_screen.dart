@@ -1,47 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:quiz_app/models/quiz_model.dart';
 
-class QuizScreen extends StatelessWidget {
-  final String name;
-  const QuizScreen({super.key, required this.name});
+import '../../controller/quizcontroller.dart';
+import 'custom_options_screen.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: HexColor('efeee5'),
-      appBar: AppBar(
-        leadingWidth: 100,
-        backgroundColor: HexColor('efeee5'),
-        elevation: 0.0,
-        title: const Text(
-          "7/10",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: InkWell(
-            onTap: () => Get.back(),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black,
-                ),
-                Text("previous",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: SizedBox(
-          width: double.infinity,
+Widget buildQuiz(QuestionModel question, int index) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 24),
+    child: SizedBox(
+      width: double.infinity,
+      child: GetBuilder<QuizController>(
+        builder: (QuizController controller) => SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -92,20 +63,58 @@ class QuizScreen extends StatelessWidget {
                     child: Container(
                         alignment: Alignment.center,
                         margin: const EdgeInsets.only(top: 30.0),
-                        child: const Text(
-                          "dfdsfsfsfdfjfgjhfhgfhfhfghcghfhfhfhgfhfhfhfhfhfhfhfhgfhgfhfhgfhfhgfhfhgfhfhgfhgf",
-                          style: TextStyle(
+                        child: Text(
+                          controller.listQuistion[index].question,
+                          style: const TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
-                              wordSpacing: -2),
+                              wordSpacing: 2),
                         )),
                   )
                 ],
               ),
+              const SizedBox(
+                height: 70,
+              ),
+              ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => CustomOptions(
+                        onTap: () {
+                          controller.i = index;
+                          controller.update();
+                        },
+                        option: question.listAnswers[index],
+                        isSelected: controller.i == index ? true : false,
+                      ),
+                  separatorBuilder: (context, index) => const SizedBox(
+                        height: 20,
+                      ),
+                  itemCount: controller.listQuistion[0].listAnswers.length),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: () {
+                    controller.pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut);
+                    controller.questionNow++;
+                    controller.update();
+                  },
+                  child: const Text("Next",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)))
             ],
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

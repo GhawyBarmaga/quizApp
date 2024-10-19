@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quiz_app/controller/quizcontroller.dart';
 import 'package:quiz_app/views/presentation/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.put(QuizController());
   runApp(const MyApp());
 }
 
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-          textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -25,4 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

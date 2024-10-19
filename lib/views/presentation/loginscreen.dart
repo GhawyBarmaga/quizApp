@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../quiz_screen.dart';
+import '../quizscreens/quiz_screen.dart';
 import '../shared/components.dart';
 
 class LoginScreen extends StatefulWidget {
